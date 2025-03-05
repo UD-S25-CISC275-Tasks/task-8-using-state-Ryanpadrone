@@ -20,7 +20,7 @@ export function getNonEmptyQuestions(questions: Question[]): Question[] {
         (question: Question): Boolean =>
             question.body !== "" ||
             question.expected !== "" ||
-            question.options.length > 0,
+            question.options.length > 0
     );
 }
 
@@ -30,7 +30,7 @@ export function getNonEmptyQuestions(questions: Question[]): Question[] {
  */
 export function findQuestion(
     questions: Question[],
-    id: number,
+    id: number
 ): Question | null {
     return questions.find((question: Question) => question.id === id) || null;
 }
@@ -58,7 +58,7 @@ export function sumPoints(questions: Question[]): number {
     return questions.reduce(
         (currentSum: number, question: Question) =>
             currentSum + question.points,
-        0,
+        0
     );
 }
 
@@ -69,7 +69,7 @@ export function sumPublishedPoints(questions: Question[]): number {
     return questions.reduce(
         (sumNum: number, question: Question) =>
             question.published ? sumNum + question.points : sumNum,
-        0,
+        0
     );
 }
 
@@ -96,7 +96,7 @@ export function toCSV(questions: Question[]): string {
         questions
             .map(
                 (question: Question): string =>
-                    `${question.id},${question.name},${question.options.length},${question.points},${question.published}`,
+                    `${question.id},${question.name},${question.options.length},${question.points},${question.published}`
             )
             .join("\n")
     );
@@ -112,7 +112,7 @@ export function makeAnswers(questions: Question[]): Answer[] {
         questionId: question.id,
         text: "",
         submitted: false,
-        correct: false,
+        correct: false
     }));
 }
 
@@ -123,7 +123,7 @@ export function makeAnswers(questions: Question[]): Answer[] {
 export function publishAll(questions: Question[]): Question[] {
     return questions.map((question: Question) => ({
         ...question,
-        published: true,
+        published: true
     }));
 }
 
@@ -137,7 +137,7 @@ export function sameType(questions: Question[]): boolean {
     }
     const firstQuestion = questions[0].type;
     return questions.every(
-        (question: Question) => question.type === firstQuestion,
+        (question: Question) => question.type === firstQuestion
     );
 }
 
@@ -150,7 +150,7 @@ export function addNewQuestion(
     questions: Question[],
     id: number,
     name: string,
-    type: QuestionType,
+    type: QuestionType
 ): Question[] {
     const blankQuestion: Question = makeBlankQuestion(id, name, type);
     return [...questions, blankQuestion];
@@ -164,10 +164,10 @@ export function addNewQuestion(
 export function renameQuestionById(
     questions: Question[],
     targetId: number,
-    newName: string,
+    newName: string
 ): Question[] {
     return questions.map((question: Question) =>
-        question.id == targetId ? { ...question, name: newName } : question,
+        question.id == targetId ? { ...question, name: newName } : question
     );
 }
 
@@ -181,19 +181,19 @@ export function renameQuestionById(
 export function changeQuestionTypeById(
     questions: Question[],
     targetId: number,
-    newQuestionType: QuestionType,
+    newQuestionType: QuestionType
 ): Question[] {
     return questions.map((question: Question) =>
-        question.id == targetId ?
-            {
-                ...question,
-                type: newQuestionType,
-                options:
-                    newQuestionType !== "multiple_choice_question" ?
-                        []
-                    :   question.options,
-            }
-        :   question,
+        question.id == targetId
+            ? {
+                  ...question,
+                  type: newQuestionType,
+                  options:
+                      newQuestionType !== "multiple_choice_question"
+                          ? []
+                          : question.options
+              }
+            : question
     );
 }
 
@@ -211,20 +211,20 @@ export function editOption(
     questions: Question[],
     targetId: number,
     targetOptionIndex: number,
-    newOption: string,
+    newOption: string
 ): Question[] {
     return questions.map((question) =>
-        question.id === targetId ?
-            {
-                ...question,
-                options:
-                    targetOptionIndex === -1 ?
-                        [...question.options, newOption]
-                    :   question.options.map((opt, idx) =>
-                            idx === targetOptionIndex ? newOption : opt,
-                        ),
-            }
-        :   question,
+        question.id === targetId
+            ? {
+                  ...question,
+                  options:
+                      targetOptionIndex === -1
+                          ? [...question.options, newOption]
+                          : question.options.map((opt, idx) =>
+                                idx === targetOptionIndex ? newOption : opt
+                            )
+              }
+            : question
     );
 }
 
@@ -237,15 +237,15 @@ export function editOption(
 export function duplicateQuestionInArray(
     questions: Question[],
     targetId: number,
-    newId: number,
+    newId: number
 ): Question[] {
     const targetQ = questions.findIndex(
-        (question: Question) => question.id == targetId,
+        (question: Question) => question.id == targetId
     );
     const duplicate = duplicateQuestion(newId, questions[targetQ]);
     return [
         ...questions.slice(0, targetQ + 1),
         duplicate,
-        ...questions.slice(targetQ + 1),
+        ...questions.slice(targetQ + 1)
     ];
 }
